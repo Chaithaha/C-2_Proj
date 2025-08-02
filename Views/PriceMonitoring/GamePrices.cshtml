@@ -1,0 +1,248 @@
+@model CreativeColab.Models.ViewModels.GamePriceViewModel
+@{
+    ViewData["Title"] = $"Price Tracking - {Model.Game.Title}";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3"> @Model.Game.Title - Price Tracking</h1>
+        <a asp-controller="Games" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Games
+        </a>
+    </div>
+
+    <!-- Game Info -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Game Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Title:</strong> @Model.Game.Title</p>
+                            <p><strong>Genre:</strong> @Model.Game.Genre</p>
+                            <p><strong>Platform:</strong> @Model.Game.Platform</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Developer:</strong> @(Model.Game.Developer ?? "Unknown")</p>
+                            <p><strong>Release Date:</strong> @(Model.Game.ReleaseDate?.ToString("MMM dd, yyyy") ?? "TBA")</p>
+                            <p><strong>Description:</strong> @(Model.Game.Description ?? "No description available")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Price Statistics</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.PriceStatistics != null)
+                    {
+                        <div class="text-center">
+                            <h3 class="text-success">$@Model.PriceStatistics.CurrentPrice.ToString("F2")</h3>
+                            <p class="text-muted">Current Price</p>
+                            
+                            @if (Model.PriceStatistics.PriceChange.HasValue)
+                            {
+                                var changeClass = Model.PriceStatistics.PriceChange > 0 ? "text-danger" : "text-success";
+                                var changeIcon = Model.PriceStatistics.PriceChange > 0 ? "↗" : "↘";
+                                <p class="@changeClass">
+                                    @changeIcon $@Math.Abs(Model.PriceStatistics.PriceChange.Value).ToString("F2")
+                                    @if (Model.PriceStatistics.PriceChangePercentage.HasValue)
+                                    {
+                                        <span>(@Model.PriceStatistics.PriceChangePercentage.Value.ToString("F1")%)</span>
+                                    }
+                                </p>
+                            }
+                            
+                            <hr>
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="text-muted">Lowest</small><br>
+                                    <strong>$@Model.PriceStatistics.MinPrice.ToString("F2")</strong>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Highest</small><br>
+                                    <strong>$@Model.PriceStatistics.MaxPrice.ToString("F2")</strong>
+                                </div>
+                            </div>
+                            <hr>
+                            <small class="text-muted">@Model.PriceStatistics.TotalPriceEntries price entries tracked</small>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No price data available</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Prices -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Current Prices by Store</h5>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addPriceModal">
+                        <i class="fas fa-plus"></i> Add Price
+                    </button>
+                </div>
+                <div class="card-body">
+                    @if (Model.CurrentPrices.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Store</th>
+                                        <th>Current Price</th>
+                                        <th>Last Updated</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var price in Model.CurrentPrices)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@price.Store.Name</strong>
+                                                @if (!string.IsNullOrEmpty(price.Store.Website))
+                                                {
+                                                    <br><a href="@price.Store.Website" target="_blank" class="small">Visit Store</a>
+                                                }
+                                            </td>
+                                            <td><span class="badge bg-success fs-6">$@price.Price.ToString("F2")</span></td>
+                                            <td>@price.DateTracked.ToString("MMM dd, yyyy HH:mm")</td>
+                                            <td>
+                                                <a asp-controller="PriceMonitoring" asp-action="PriceHistory" asp-route-id="@Model.Game.GameId" 
+                                                   class="btn btn-sm btn-outline-info">View History</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-store fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No price data available for this game.</p>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPriceModal">
+                                <i class="fas fa-plus"></i> Add First Price
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Price History Chart -->
+    @if (Model.PriceHistory.Any())
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Price History</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Store</th>
+                                        <th>Price</th>
+                                        <th>Change</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        decimal? previousPrice = null;
+                                    }
+                                    @foreach (var price in Model.PriceHistory.Take(20))
+                                    {
+                                        <tr>
+                                            <td>@price.DateTracked.ToString("MMM dd, yyyy HH:mm")</td>
+                                            <td>@price.Store.Name</td>
+                                            <td>$@price.Price.ToString("F2")</td>
+                                            <td>
+                                                @if (previousPrice.HasValue)
+                                                {
+                                                    var change = price.Price - previousPrice.Value;
+                                                    var changeClass = change > 0 ? "text-danger" : change < 0 ? "text-success" : "text-muted";
+                                                    var changeIcon = change > 0 ? "↗" : change < 0 ? "↘" : "→";
+                                                    <span class="@changeClass">
+                                                        @changeIcon $@Math.Abs(change).ToString("F2")
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                        previousPrice = price.Price;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Add Price Modal -->
+<div class="modal fade" id="addPriceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Price Entry</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-controller="PriceMonitoring" asp-action="AddPrice" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="gameId" value="@Model.Game.GameId" />
+                    
+                    <div class="mb-3">
+                        <label for="storeId" class="form-label">Store</label>
+                        <select name="storeId" id="storeId" class="form-select" required>
+                            <option value="">Select a store...</option>
+                            <option value="1">Steam</option>
+                            <option value="2">Epic Games</option>
+                            <option value="3">PlayStation Store</option>
+                            <option value="4">Xbox Store</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price ($)</label>
+                        <input type="number" name="price" id="price" class="form-control" step="0.01" min="0" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Price</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+} 

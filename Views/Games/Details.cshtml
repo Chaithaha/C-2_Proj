@@ -1,0 +1,23 @@
+@model CreativeColab.Models.Game
+@{
+    ViewData["Title"] = "Game Details";
+}
+<h2>Game Details</h2>
+<div>
+    <h4>@Model.Title</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Genre</dt>
+        <dd class="col-sm-10">@Model.Genre</dd>
+        <dt class="col-sm-2">Platform</dt>
+        <dd class="col-sm-10">@Model.Platform</dd>
+        <dt class="col-sm-2">Release Date</dt>
+        <dd class="col-sm-10">@Model.ReleaseDate?.ToShortDateString()</dd>
+        <dt class="col-sm-2">Description</dt>
+        <dd class="col-sm-10">@Model.Description</dd>
+    </dl>
+</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.GameId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</p>

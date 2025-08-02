@@ -1,0 +1,38 @@
+@model CreativeColab.Models.ViewModels.ProjectViewModel
+@{
+    ViewData["Title"] = "Projects";
+}
+<h2>Projects</h2>
+<p>
+    <a asp-action="Create">Add New Project</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Owner</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Projects != null)
+        {
+            @foreach (var item in Model.Projects)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Status</td>
+                    <td>@(item.OwnerUser?.Username ?? "Unknown")</td>
+                    <td>@item.CreatedAt.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.ProjectId">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

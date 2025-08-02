@@ -1,0 +1,40 @@
+@model CreativeColab.Models.ViewModels.GameViewModel
+@{
+    ViewData["Title"] = "Games";
+}
+<h2>Games</h2>
+<p>
+    <a asp-action="Create">Add New Game</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Platform</th>
+            <th>Release Date</th>
+            <th>Bookmarks</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Games != null)
+        {
+            @foreach (var item in Model.Games)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Genre</td>
+                    <td>@item.Platform</td>
+                    <td>@item.ReleaseDate?.ToShortDateString()</td>
+                    <td>@(item.Bookmarks?.Count ?? 0) bookmarks</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.GameId">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@item.GameId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

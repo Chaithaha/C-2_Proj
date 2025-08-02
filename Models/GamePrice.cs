@@ -1,7 +1,11 @@
-﻿namespace CreativeColab.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CreativeColab.Models
 {
     public class GamePrice
     {
+        // Primary key for GamePrice
+        [Key]
         public int PriceId { get; set; }
         public int GameId { get; set; }
         public int StoreId { get; set; }

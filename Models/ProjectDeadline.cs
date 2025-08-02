@@ -1,7 +1,11 @@
-﻿namespace CreativeColab.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CreativeColab.Models
 {
     public class ProjectDeadline
     {
+        // Primary key for ProjectDeadline
+        [Key]
         public int DeadlineId { get; set; }
         public int ProjectId { get; set; }
         public string Title { get; set; } = null!;

@@ -1,0 +1,30 @@
+@model CreativeColab.Models.Project
+@{
+    ViewData["Title"] = "Edit Project";
+}
+<h2>Edit Project</h2>
+<form asp-action="Edit">
+    <input type="hidden" asp-for="ProjectId" />
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <input asp-for="Status" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="OwnerUserId"></label>
+        <input asp-for="OwnerUserId" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="CreatedAt"></label>
+        <input asp-for="CreatedAt" class="form-control" type="date" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

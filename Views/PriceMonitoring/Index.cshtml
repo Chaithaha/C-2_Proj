@@ -1,0 +1,146 @@
+@model CreativeColab.Models.ViewModels.PriceMonitoringViewModel
+@{
+    ViewData["Title"] = "Price Monitoring Dashboard";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4"> Price Monitoring Dashboard</h1>
+
+    <!-- Price Alerts Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bell text-warning"></i> Recent Price Drops
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.PriceAlerts.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Game</th>
+                                        <th>Store</th>
+                                        <th>Current Price</th>
+                                        <th>Previous Price</th>
+                                        <th>Price Drop</th>
+                                        <th>Drop %</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var alert in Model.PriceAlerts.Take(10))
+                                    {
+                                        <tr class="@(alert.DropPercentage > 20 ? "table-success" : alert.DropPercentage > 10 ? "table-warning" : "")">
+                                            <td>
+                                                <strong>@alert.Game.Title</strong>
+                                                <br><small class="text-muted">@alert.Game.Genre</small>
+                                            </td>
+                                            <td>@alert.Store.Name</td>
+                                            <td><span class="badge bg-success">$@alert.CurrentPrice.ToString("F2")</span></td>
+                                            <td><span class="text-muted">$@alert.PreviousPrice.ToString("F2")</span></td>
+                                            <td><span class="text-danger">-$@alert.PriceDrop.ToString("F2")</span></td>
+                                            <td><span class="badge bg-danger">@alert.DropPercentage.ToString("F1")%</span></td>
+                                            <td>@alert.DateTracked.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                <a asp-controller="PriceMonitoring" asp-action="GamePrices" asp-route-id="@alert.Game.GameId" 
+                                                   class="btn btn-sm btn-outline-primary">View Details</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No recent price drops found. Check back later!</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-user text-primary"></i> Your Price Alerts
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>Monitor your bookmarked games and get notified when prices drop.</p>
+                    <a asp-controller="PriceMonitoring" asp-action="UserAlerts" class="btn btn-primary">
+                        <i class="fas fa-bell"></i> View Your Alerts
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-store text-success"></i> Game Stores
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>Browse games by store and track prices across different platforms.</p>
+                    <a asp-controller="PriceMonitoring" asp-action="Stores" class="btn btn-success">
+                        <i class="fas fa-store"></i> Browse Stores
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Available Stores -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-shopping-cart text-info"></i> Available Stores
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach (var store in Model.AvailableStores)
+                        {
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card border">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">@store.Name</h6>
+                                        @if (!string.IsNullOrEmpty(store.Website))
+                                        {
+                                            <a href="@store.Website" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                                Visit Store
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-refresh price alerts every 5 minutes
+        setTimeout(function() {
+            location.reload();
+        }, 300000);
+    </script>
+} 

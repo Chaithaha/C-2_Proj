@@ -1,0 +1,46 @@
+@model CreativeColab.Models.Project
+@{
+    ViewData["Title"] = "Create Project";
+}
+<h2>Create Project</h2>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<form asp-action="Create" method="post" id="createProjectForm">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <input asp-for="Status" class="form-control" placeholder="e.g., planned, active, completed" />
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#createProjectForm').on('submit', function(e) {
+                console.log('Form submitted');
+                console.log('Form data:', $(this).serialize());
+                alert('Form is being submitted!');
+                // Prevent default to see if the form is actually being submitted
+                // e.preventDefault();
+            });
+
+            // Also test button click
+            $('button[type="submit"]').on('click', function(e) {
+                console.log('Submit button clicked');
+                alert('Submit button clicked!');
+            });
+        });
+    </script>
+}

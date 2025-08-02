@@ -1,0 +1,51 @@
+@model CreativeColab.Models.Payment
+@{
+    ViewData["Title"] = "Create Payment";
+}
+<h2>Create Payment</h2>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<form asp-action="Create" method="post" id="createPaymentForm">
+    <div class="form-group">
+        <label asp-for="Amount"></label>
+        <input asp-for="Amount" class="form-control" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PaymentMethod"></label>
+        <input asp-for="PaymentMethod" class="form-control" placeholder="e.g., credit card, cash, bank transfer" />
+        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="Type"></label>
+        <input asp-for="Type" class="form-control" placeholder="e.g., game, project, product" />
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#createPaymentForm').on('submit', function(e) {
+                console.log('Form submitted');
+                console.log('Form data:', $(this).serialize());
+                alert('Form is being submitted!');
+                // Prevent default to see if the form is actually being submitted
+                // e.preventDefault();
+            });
+
+            // Also test button click
+            $('button[type="submit"]').on('click', function(e) {
+                console.log('Submit button clicked');
+                alert('Submit button clicked!');
+            });
+        });
+    </script>
+}

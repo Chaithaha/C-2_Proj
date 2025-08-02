@@ -1,0 +1,40 @@
+@model CreativeColab.Models.ViewModels.PaymentViewModel
+@{
+    ViewData["Title"] = "Payments";
+}
+<h2>Payments</h2>
+<p>
+    <a asp-action="Create">Add New Payment</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Amount</th>
+            <th>Payment Method</th>
+            <th>Payment Date</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Payments != null)
+        {
+            @foreach (var item in Model.Payments)
+            {
+                <tr>
+                    <td>@item.Amount</td>
+                    <td>@item.PaymentMethod</td>
+                    <td>@item.PaymentDate.ToShortDateString()</td>
+                    <td>@item.Description</td>
+                    <td>@item.Type</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.PaymentId">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@item.PaymentId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.PaymentId">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
