@@ -204,6 +204,50 @@ namespace CreativeColab.Services
 
             return alerts;
         }
+
+        public async Task<List<Store>> GetAllStoresAsync()
+        {
+            return await _context.Stores
+                .Include(s => s.GamePrices)
+                .ThenInclude(gp => gp.Game)
+                .ToListAsync();
+        }
+
+        public async Task<Store?> GetStoreByIdAsync(int id)
+        {
+            return await _context.Stores
+                .Include(s => s.GamePrices)
+                .ThenInclude(gp => gp.Game)
+                .FirstOrDefaultAsync(s => s.StoreId == id);
+        }
+
+        public async Task<Store> AddStoreAsync(Store store)
+        {
+            _context.Stores.Add(store);
+            await _context.SaveChangesAsync();
+            return store;
+        }
+
+        public async Task<bool> UpdateStoreAsync(Store updatedStore)
+        {
+            if (!_context.Stores.Any(s => s.StoreId == updatedStore.StoreId))
+                return false;
+
+            _context.Stores.Update(updatedStore);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteStoreAsync(int storeId)
+        {
+            var store = await _context.Stores.FindAsync(storeId);
+            if (store == null) return false;
+
+            _context.Stores.Remove(store);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 
     // Data transfer objects for price tracking

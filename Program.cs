@@ -10,8 +10,8 @@ builder.Services.AddControllers(); // Add this for API controllers
 // Register the application's DbContext for MySQL (XAMPP)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+        builder.Configuration.GetConnectionString("RemoteMySqlConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("RemoteMySqlConnection"))
     ));
 
 // Register API controllers
