@@ -19,7 +19,7 @@ A collaborative platform that combines game discovery, price tracking, and proje
 
 1. **Clone the repository**
    ```bash
-   git clone [your-repo-url]
+   git clone https://github.com/Chaithaha/C-2_Proj/
    cd C-2_Proj
    ```
 
