@@ -1,28 +1,60 @@
-# CreativeColab - MVP Integration Plan
+# CreativeColab 🎮
 
-This project is the collaborative platform for merging features from GameFinder, Price Tracker, and Creative Desk. Below is the current MVP integration checklist for the team:
+A collaborative platform that combines game discovery, price tracking, and project management in one unified application.
 
-- [ ] Create a unified DbContext and database
-- [ ] Merge and refactor models
-- [ ] Integrate controllers and services
-- [ ] Unify views and navigation
-- [ ] Set up authentication and user management
-- [ ] Test all core features
-- [ ] Update documentation
+## What it does
 
-See the codebase and Documentation file for more details.
+- **🎯 GameFinder**: Search and discover games based on your preferences
+- **💰 Price Tracker**: Monitor game prices across different stores
+- **📊 Dashboard**: Visual tracking and management of projects, payments, and deadlines
+- **👥 Collaboration**: Team-based project management with user roles
 
-# C-2_Proj
+## Quick Start
 
-# This is a collaborative project for Back-End 2 - Done by Pallavi, Chait and Dhruv
+### Prerequisites
+- .NET 8.0 SDK
+- MySQL (or XAMPP/WAMP)
 
-# The idea is to collaborate our three vastly different projects and compile them into one functioning project.
+### Setup
 
-## Pallavi - A dashboard system to track certain items
-## Chait - A GameFinder that that searches and recommends games for you
-## Dhruv - A price tracker, that tracks the price of a particular item 
+1. **Clone the repository**
+   ```bash
+   git clone [your-repo-url]
+   cd C-2_Proj
+   ```
 
-# Our solution - A working platform that lets you find games based on your preferences and then, allows you to track it/s price using our included visual dashbord
+2. **Set up the database**
+   - Open phpMyAdmin
+   - Create a database called `creativecollabDB`
+   - Import `creativecollab_database.sql` from the project root
 
-## Services Folder
-A `Services/` folder will be created for shared business logic and utilities (e.g., price tracking, recommendations, notifications). Place reusable code here as you integrate features from each project.
+3. **Configure connection string**
+   - Edit `appsettings.json`
+   - Update the `DefaultConnection` with your MySQL credentials
+
+4. **Run the application**
+   ```bash
+   dotnet restore
+   dotnet run
+   ```
+
+5. **Open in browser**
+   - Go to `http://localhost:5193`
+
+## Features
+
+✅ **Games**: Browse, search, and bookmark games  
+✅ **Projects**: Create and manage collaborative projects  
+✅ **Payments**: Track payments with proper currency formatting  
+✅ **Price Monitoring**: Monitor game prices across stores  
+✅ **User Management**: Role-based access control  
+
+## Team
+
+- **Pallavi**: Dashboard system
+- **Chait**: GameFinder functionality  
+- **Dhruv**: Price tracking system
+
+---
+
+*Built with ASP.NET Core 8.0 and MySQL*
