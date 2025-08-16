@@ -1,9 +1,12 @@
-﻿namespace CreativeColab.Models
+﻿using System.ComponentModel;
+
+namespace CreativeColab.Models
 {
     public class Installment
     {
         public int InstallmentId { get; set; }
         public int ProjectId { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
         public decimal Amount { get; set; }
         public DateTime DueDate { get; set; }
         public bool IsPaid { get; set; }

@@ -23,7 +23,7 @@
             @foreach (var item in Model.Payments)
             {
                 <tr>
-                    <td>@item.Amount</td>
+                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
                     <td>@item.PaymentMethod</td>
                     <td>@item.PaymentDate.ToShortDateString()</td>
                     <td>@item.Description</td>
